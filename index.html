@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parikshit Dhull — Analytics & AI Portfolio</title>
+<style>
+  :root {
+    --accent: #1F4E79;
+    --accent-light: #E8F0F8;
+    --accent-mid: #2E6DAD;
+    --text: #1a1a1a;
+    --text-muted: #5a5a5a;
+    --text-light: #888;
+    --border: #e5e5e5;
+    --surface: #f8f8f8;
+    --white: #ffffff;
+    --success: #0a7c4a;
+    --success-bg: #eaf7f0;
+    --warning-bg: #fff8e6;
+    --warning: #8a6200;
+    --danger-bg: #fef0f0;
+    --danger: #c0392b;
+    --purple: #5b3fa0;
+    --purple-bg: #f0ecfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: var(--white); line-height: 1.6; }
+
+  /* HERO */
+  .hero { background: var(--accent); color: white; padding: 3rem 2rem 2.5rem; }
+  .hero-inner { max-width: 860px; margin: 0 auto; }
+  .hero-name { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
+  .hero-title { font-size: 1rem; opacity: 0.85; margin-bottom: 1.25rem; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+  .hero-tag { font-size: 12px; padding: 4px 12px; border-radius: 20px; background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+  .hero-links { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero-link { font-size: 13px; color: rgba(255,255,255,0.9); text-decoration: none; display: flex; align-items: center; gap: 5px; }
+  .hero-link:hover { color: white; text-decoration: underline; }
+  .hero-link svg { width: 14px; height: 14px; }
+
+  /* NAV */
+  .nav-wrap { background: white; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .nav { max-width: 860px; margin: 0 auto; display: flex; overflow-x: auto; }
+  .nav-btn { font-size: 13px; padding: 12px 16px; color: var(--text-muted); border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; font-weight: 500; }
+  .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .nav-btn:hover { color: var(--text); }
+
+  /* MAIN */
+  .main { max-width: 860px; margin: 0 auto; padding: 2rem; }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+
+  /* CARD */
+  .card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; cursor: pointer; transition: all 0.15s; }
+  .card:hover { border-color: var(--accent-mid); box-shadow: 0 2px 12px rgba(31,78,121,0.08); transform: translateY(-1px); }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.35; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; font-weight: 500; }
+  .badge-blue { background: var(--accent-light); color: var(--accent); }
+  .badge-purple { background: var(--purple-bg); color: var(--purple); }
+  .badge-green { background: var(--success-bg); color: var(--success); }
+  .badge-yellow { background: var(--warning-bg); color: var(--warning); }
+  .badge-red { background: var(--danger-bg); color: var(--danger); }
+  .card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.55; margin-bottom: 10px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag { font-size: 11px; padding: 2px 7px; border-radius: 4px; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); }
+
+  /* DETAIL */
+  .detail { display: none; }
+  .back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--accent); cursor: pointer; margin-bottom: 1.5rem; font-weight: 500; border: none; background: none; padding: 0; }
+  .back:hover { text-decoration: underline; }
+  .back svg { width: 16px; height: 16px; }
+  .detail-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; }
+  .detail-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .detail-title { font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .detail-unit { font-size: 13px; color: var(--text-light); margin-bottom: 1.5rem; }
+  .section-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-light); margin: 1.25rem 0 6px; }
+  .section-lbl:first-of-type { margin-top: 0; }
+  .block { font-size: 13px; color: var(--text-muted); line-height: 1.65; padding: 10px 14px; border-radius: 8px; margin-bottom: 6px; }
+  .block-blue { background: var(--accent-light); border-left: 3px solid var(--accent-mid); }
+  .block-red { background: var(--danger-bg); border-left: 3px solid #e74c3c; }
+  .block-green { background: var(--success-bg); border-left: 3px solid var(--success); color: #0a5c38; }
+  .metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 6px; }
+  .metric { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+  .metric-num { font-size: 22px; font-weight: 700; color: var(--accent); }
+  .metric-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+  .tool-row { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tool { font-size: 11px; padding: 3px 9px; border-radius: 5px; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+  /* FOOTER */
+  footer { text-align: center; font-size: 12px; color: var(--text-light); padding: 2rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+
+  @media(max-width:600px) {
+    .hero { padding: 2rem 1.25rem; }
+    .main { padding: 1.25rem; }
+    .hero-name { font-size: 1.75rem; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .detail-card { padding: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-name">Parikshit Dhull</div>
+    <div class="hero-title">AI & Data Analyst &nbsp;·&nbsp; Business Analytics &nbsp;·&nbsp; Master of Business Analytics (AI for Business), Deakin University 2025</div>
+    <div class="hero-tags">
+      <span class="hero-tag">Python</span>
+      <span class="hero-tag">Machine Learning</span>
+      <span class="hero-tag">Power BI</span>
+      <span class="hero-tag">SQL</span>
+      <span class="hero-tag">R</span>
+      <span class="hero-tag">Statistical Modelling</span>
+      <span class="hero-tag">AI for Business</span>
+      <span class="hero-tag">RapidMiner</span>
+    </div>
+    <div class="hero-links">
+      <a class="hero-link" href="mailto:parikshitdhull02@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        parikshitdhull02@gmail.com
+      </a>
+      <a class="hero-link" href="https://www.linkedin.com/in/parikshitdhull" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        linkedin.com/in/parikshitdhull
+      </a>
+      <span class="hero-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        Melbourne, VIC &nbsp;·&nbsp; 485 Visa — Full Work Rights to Feb 2029
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="nav-wrap">
+  <div class="nav">
+    <button class="nav-btn active" onclick="filterProjects('all',this)">All projects</button>
+    <button class="nav-btn" onclick="filterProjects('ai',this)">AI & ML</button>
+    <button class="nav-btn" onclick="filterProjects('bi',this)">BI & Analytics</button>
+    <button class="nav-btn" onclick="filterProjects('stats',this)">Statistical</button>
+    <button class="nav-btn" onclick="filterProjects('consulting',this)">Consulting</button>
+  </div>
+</div>
+
+<div class="main">
+  <div id="list-view">
+    <div class="grid" id="grid"></div>
+  </div>
+  <div class="detail" id="detail-view">
+    <button class="back" onclick="showList()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+      All projects
+    </button>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<footer>
+  Parikshit Dhull &nbsp;·&nbsp; Master of Business Analytics (AI for Business), Deakin University 2025 &nbsp;·&nbsp; Melbourne, VIC
+</footer>
+
+<script>
+const projects = [
+  {
+    id:"wva",
+    title:"Donor Campaign Analytics — World Vision Australia",
+    badge:"Industry Capstone",
+    badgeClass:"badge-blue",
+    desc:"End-to-end AI analytics engagement for a live client — identifying why bounceback donation campaigns were underperforming and redesigning strategy using machine learning segmentation.",
+    tools:["Python","k-means Clustering","Power BI","Pandas","NumPy","Statistical Analysis","Data Quality Management"],
+    tags:["ai","bi","consulting"],
+    unit:"MIS779 — Industry Capstone · Jul–Nov 2025",
+    problem:"WVA bounceback donation campaigns had declining response rates with no segment-level understanding of which donors were worth re-engaging. Data spanned 228,000+ supporter records across 7 years and 4 interconnected datasets.",
+    approach:"Applied Python k-means clustering to segment the full donor base into 8 behavioural profiles based on recency, frequency, and monetary value. Validated cluster stability, maintained data quality across all 4 datasets, and built Power BI dashboards presenting segment-level KPIs to WVA leadership.",
+    metrics:[
+      {num:"83×",lbl:"More annual value — existing vs new donors ($196 vs $2.36)"},
+      {num:"70%",lbl:"Of donations occur within 30 days of first contact"},
+      {num:"8",lbl:"Behavioural segments identified via k-means clustering"},
+      {num:"228K+",lbl:"Donor records analysed across 7 years"}
+    ],
+    findings:[
+      "Existing lapsed donors were far more valuable to re-engage than acquiring new donors — a finding invisible in aggregate reporting.",
+      "Campaign timing was misaligned with the 30-day response window — the majority of donations were being solicited outside peak conversion periods.",
+      "High-value segments showed distinct communication channel preferences not being respected in the current campaign design."
+    ],
+    outcome:"Redesigned campaign targeting strategy, new KPI framework (reactivation rate, upgrade rate, average donation value), and formal client report delivered to WVA Analytics and Marketing Technology team — directly reshaping how WVA allocates campaign resources."
+  },
+  {
+    id:"dax",
+    title:"Airline Customer Satisfaction — Predictive ML Modelling",
+    badge:"Predictive Analytics",
+    badgeClass:"badge-purple",
+    desc:"Built and benchmarked Decision Tree and k-NN classification models to identify which service factors most drove DAX Air customer ratings — enabling evidence-based investment decisions.",
+    tools:["RapidMiner","Decision Tree","k-NN","Cross-Validation","70/30 Hold-out","Python"],
+    tags:["ai"],
+    unit:"MIS772 — Predictive Analytics · T2 2024",
+    problem:"DAX Air had extensive passenger review data but no model to identify which service factors (staff, pricing, seat comfort, cabin class) most significantly drove overall satisfaction ratings — making investment prioritisation impossible.",
+    approach:"Built Decision Tree (max depth 12) and k-NN classification models using 70/30 hold-out validation and cross-validation. Compared models across accuracy, kappa, and AUC. Selected and discretised overall rating as the label variable. Cleaned data using mean imputation and filter operators.",
+    metrics:[
+      {num:"84.19%",lbl:"Decision Tree accuracy (max depth 12)"},
+      {num:"0.897",lbl:"AUC — strong discriminative power"},
+      {num:"0.663",lbl:"Kappa — substantial agreement beyond chance"},
+      {num:"2",lbl:"Models compared: Decision Tree vs k-NN"}
+    ],
+    findings:[
+      "Decision Tree outperformed k-NN across all metrics — accuracy, kappa, and AUC — at every tested parameter setting.",
+      "Staff performance, pricing, and seat comfort were identified as the primary drivers of overall customer satisfaction ratings.",
+      "Economy class passengers showed significantly higher sensitivity to pricing and seat comfort than business class travellers."
+    ],
+    outcome:"Recommended targeted investment in staff training and seat comfort upgrades over broad pricing changes — with evidence-based feature importance analysis presented as a formal client deliverable."
+  },
+  {
+    id:"gkj",
+    title:"Phishing Resilience BI Dashboard — GKJ Pty Ltd",
+    badge:"BI & Database",
+    badgeClass:"badge-yellow",
+    desc:"Designed 3 stakeholder-specific Power BI dashboards from a normalised relational database — revealing phishing vulnerability variation across departments and enabling targeted security training.",
+    tools:["Power BI","SQL","Database Design","1NF to 3NF","Business Intelligence","KPI Design"],
+    tags:["bi"],
+    unit:"MIS781 — Business Intelligence and Database · T1 2024",
+    problem:"GKJ Pty Ltd was applying security awareness training uniformly despite having no visibility into which departments, computer usage types, or campaign types were generating the highest phishing click rates.",
+    approach:"Designed a normalised relational database (1NF to 3NF) from raw phishing simulation data. Defined 12+ business rules and KPI definitions. Built 3 role-specific Power BI dashboards tailored to end users, HR managers, and phishing campaign managers — each with distinct visualisations and success metrics.",
+    metrics:[
+      {num:"3",lbl:"Role-specific dashboards (Users, HR, Campaign Managers)"},
+      {num:"12+",lbl:"KPIs defined across click rate, report rate, and email engagement"},
+      {num:"3NF",lbl:"Database normalisation level achieved"},
+      {num:"3",lbl:"Stakeholder groups with distinct data needs identified"}
+    ],
+    findings:[
+      "Click rates varied significantly by department and computer usage type — variation invisible in aggregate reporting.",
+      "HR managers and campaign managers had fundamentally different data needs that a single dashboard could not serve.",
+      "Campaign name and timing had a measurable effect on report rates — some campaigns generated 3x more reports than others."
+    ],
+    outcome:"Three production-ready Power BI dashboards enabling GKJ Pty Ltd to direct security training toward high-risk departments rather than running blanket programs — improving training ROI and security posture."
+  },
+  {
+    id:"ev",
+    title:"EV Ownership — Consumer Behaviour and Infrastructure Analysis",
+    badge:"Statistical Analysis",
+    badgeClass:"badge-green",
+    desc:"Applied ANOVA and hypothesis testing across 5 Australian household segments to identify EV adoption patterns — informing evidence-based infrastructure investment for the energy transition.",
+    tools:["R","ANOVA","Hypothesis Testing","Excel","Confidence Intervals","Descriptive Statistics","Data Visualisation"],
+    tags:["stats"],
+    unit:"MIS771 — Descriptive Analytics and Visualisation · T2 2024",
+    problem:"EV infrastructure investment was being allocated without statistical evidence on whether geography (metro vs regional) or household type significantly affected usage patterns, travel distances, charging behaviour, or fuel savings.",
+    approach:"Applied ANOVA and independent samples hypothesis testing across 5 household segments and two geographic groups. Compared travel distances, towing usage, fuel savings, and charging frequency. Tested attitude changes toward public EV charging infrastructure between 2022 and 2023.",
+    metrics:[
+      {num:"No sig.",lbl:"Difference in travel distance: metro vs regional owners"},
+      {num:"Sig.",lbl:"Fuel savings variation — couples with children highest"},
+      {num:"2022-23",lbl:"Statistically significant positive attitude shift toward public charging"},
+      {num:"5",lbl:"Household segments analysed via ANOVA"}
+    ],
+    findings:[
+      "No statistically significant difference in travel distances or towing usage between metropolitan and regional EV owners — infrastructure should not be concentrated in cities.",
+      "Couples with children achieved significantly higher fuel cost savings than all other household types — a key target segment for EV incentive programs.",
+      "Public charging attitudes improved significantly from 2022 to 2023 — evidence that infrastructure investment was producing measurable behavioural change."
+    ],
+    outcome:"Evidence-based recommendations for EV infrastructure planning — identifying high-impact household segments for targeted incentive programs and confirming the effectiveness of public charging investment."
+  },
+  {
+    id:"maersk",
+    title:"Digital Twin Business Case — Maersk Global Operations",
+    badge:"IT Business Case",
+    badgeClass:"badge-blue",
+    desc:"Developed a formal IT business case recommending Digital Twin technology for Maersk vessel management — applying IT Portfolio Theory and RBV/VRIO frameworks to quantify competitive advantage.",
+    tools:["IT Portfolio Theory","RBV","VRIO Analysis","Business Case Development","Financial Modelling","Strategic Analysis"],
+    tags:["consulting"],
+    unit:"MIS782 — Value of Information · T1 2024",
+    problem:"Maersk vessel management faced inefficiencies in route planning, predictive maintenance scheduling, real-time tracking, and fuel consumption optimisation — contributing to cost overruns and compliance risk in a highly competitive global logistics market.",
+    approach:"Applied IT Portfolio Theory to evaluate existing IT investments (Remote Container Management, Captain Peter AI) and RBV/VRIO analysis to identify which capabilities provided sustained competitive advantage. Built a formal business case with ROI model across 4 KPI dimensions and a phased implementation roadmap.",
+    metrics:[
+      {num:"4",lbl:"KPI dimensions: fuel, maintenance, compliance, on-time delivery"},
+      {num:"VRIO",lbl:"Framework applied to map sustained competitive advantage"},
+      {num:"Digital Twin",lbl:"Primary technology recommendation for vessel management"},
+      {num:"Phased",lbl:"Implementation roadmap with risk assessment developed"}
+    ],
+    findings:[
+      "Captain Peter AI provided a temporary competitive advantage but was at risk of imitation — requiring next-generation investment to sustain differentiation.",
+      "Digital Twin technology would create a rare and difficult-to-imitate capability by combining real-time sensor data with predictive modelling across the entire fleet.",
+      "Fuel consumption optimisation alone would justify the investment at scale."
+    ],
+    outcome:"Formal IT business case with implementation roadmap, risk assessment, and ROI model delivered to an industry panel — recommending Digital Twin adoption as the next strategic IT investment for sustained competitive advantage."
+  },
+  {
+    id:"wine",
+    title:"Red Wine Quality — Regression and Statistical Modelling",
+    badge:"Real-World Analytics",
+    badgeClass:"badge-purple",
+    desc:"Applied regression analysis and feature selection in R to identify which chemical properties of red wine most significantly predict quality ratings — including Box-Cox transformation for residual correction.",
+    tools:["R","Regression Analysis","Backward Elimination","Correlation Analysis","Box-Cox Transformation","Residual Diagnostics"],
+    tags:["ai","stats"],
+    unit:"SIT718 — Real World Analytics · T1 2024",
+    problem:"Red wine quality assessment relies heavily on expert tasters — expensive, slow, and subjective. The challenge was identifying which measurable chemical properties (citric acid, alcohol, pH, chlorides, sulphur dioxide) could statistically predict quality ratings.",
+    approach:"Sampled 500 records from 1,599 total observations (seed: 224086124). Applied scatter plots, histograms, and correlation matrices to explore relationships. Used backward elimination to remove non-significant variables iteratively. Conducted residual diagnostics and applied Box-Cox transformation to correct normality violations.",
+    metrics:[
+      {num:"500",lbl:"Records sampled from 1,599 total"},
+      {num:"Alcohol",lbl:"Strongest positive correlation with quality rating"},
+      {num:"Box-Cox",lbl:"Transformation applied to correct residual normality violation"},
+      {num:"Backward",lbl:"Elimination method used to refine final model"}
+    ],
+    findings:[
+      "Alcohol content showed the strongest positive correlation with quality ratings among the 5 tested variables.",
+      "Backward elimination removed non-significant variables — citric acid and chlorides were dropped; pH, alcohol, and sulphur dioxide remained.",
+      "Residual diagnostics revealed a normality violation corrected through Box-Cox transformation, improving model reliability."
+    ],
+    outcome:"A validated regression model identifying the chemical predictors of red wine quality — enabling evidence-based quality assessment and demonstrating proficiency in statistical model building and diagnostic refinement in R."
+  },
+  {
+    id:"retail",
+    title:"Cyber Resilience Review — Retail Impact Pvt Ltd",
+    badge:"Cybersecurity Strategy",
+    badgeClass:"badge-red",
+    desc:"Conducted a live cybersecurity review for Retail Impact Pvt Ltd — assessing vulnerabilities across technical, human, and process dimensions and delivering a prioritised cyber resilience improvement strategy.",
+    tools:["Cybersecurity Frameworks","Risk Assessment","Incident Response Analysis","Business Analysis","Report Writing","Stakeholder Engagement"],
+    tags:["consulting","bi"],
+    unit:"MIS761 — Cyber Security Strategies · T2 2024 (Group)",
+    problem:"Retail Impact Pvt Ltd had no formal cybersecurity review — creating unknown exposure across systems, staff behaviour, and incident response capability in a retail environment handling customer payment data.",
+    approach:"Conducted a structured cyber resilience review with direct access to Retail Impact staff and records (live client, not a simulation). Assessed current security posture across technical controls, human factors, and process dimensions. Developed a prioritised remediation roadmap aligned to cybersecurity best practices.",
+    metrics:[
+      {num:"Live",lbl:"Real business client — Retail Impact Pvt Ltd (not a simulation)"},
+      {num:"3 domains",lbl:"Technical, human, and process dimensions assessed"},
+      {num:"Prioritised",lbl:"Remediation roadmap with risk-ranked recommendations"},
+      {num:"3",lbl:"Team members across the review engagement"}
+    ],
+    findings:[
+      "Staff awareness and human-factor vulnerabilities represented the highest-risk exposure areas in the current security posture.",
+      "Incident response capability was underdeveloped — no formal playbook existed for common attack scenarios affecting retail operations.",
+      "Technical controls were partially implemented but inconsistently applied — creating exploitable gaps across the organisation."
+    ],
+    outcome:"Comprehensive Cyber Resilience Review Report delivered to Retail Impact Pvt Ltd covering technical controls, staff training priorities, and incident response improvements — providing an actionable roadmap to strengthen cyber resilience."
+  },
+  {
+    id:"survey",
+    title:"Generative AI Readiness Survey — GKJ Pty Ltd",
+    badge:"Survey and Data Analysis",
+    badgeClass:"badge-yellow",
+    desc:"Designed a comprehensive employee survey measuring AI readiness across GKJ Pty Ltd workforce, then analysed results to uncover insights on salary equity, AI preparedness gaps, and gender dynamics in AI expectations.",
+    tools:["Survey Design","Excel","Descriptive Statistics","Correlation Analysis","Data Visualisation","Report Writing"],
+    tags:["stats","bi"],
+    unit:"MIS770 — Foundation Skills in Data Analysis · T1 2024",
+    problem:"GKJ Pty Ltd needed to assess organisational readiness for generative AI integration — understanding employee awareness levels, comfort with AI adoption, potential skill gaps, and the relationship between salary, experience, and AI attitudes across the workforce.",
+    approach:"Designed a structured employee survey covering AI familiarity, tool awareness, comfort with integration, impact expectations, and inclusivity in decision-making. Collected and analysed workforce data including salary, experience, gender, and AI attitude variables. Applied correlation analysis and comparative statistics across demographic groups.",
+    metrics:[
+      {num:"$78K",lbl:"Average annual salary across the surveyed workforce"},
+      {num:"No corr.",lbl:"No correlation found between salary and years of experience"},
+      {num:"Low",lbl:"Proportion of employees who felt their opinions were valued"},
+      {num:"Varied",lbl:"Effectiveness of existing AI preparedness programs"}
+    ],
+    findings:[
+      "Most employees believed they were sufficiently prepared for AI integration — but wage disparity and lack of inclusive decision-making remained unresolved.",
+      "No correlation was found between years of experience and salary — suggesting remuneration was not performance or tenure-linked.",
+      "No significant gender differences in AI impact expectations, nor age-related differences in job displacement concerns."
+    ],
+    outcome:"Comprehensive workforce analytics report delivered to GKJ Pty Ltd identifying AI readiness gaps, equity issues, and targeted intervention areas — enabling evidence-based decisions on training investment and organisational change management."
+  },
+  {
+    id:"maersk2",
+    title:"Maersk Real-Time Threat Monitoring — AI Business Case",
+    badge:"Group Consulting Project",
+    badgeClass:"badge-blue",
+    desc:"Developed a strategic AI business case for Maersk to implement a Real-Time Threat Monitoring System across critical maritime routes — evaluating in-house development vs outsourcing with a phased implementation plan.",
+    tools:["Business Case Development","MOV Framework","Business Canvas Model","Stakeholder Analysis","AI Strategy","IT Investment Analysis"],
+    tags:["consulting","ai"],
+    unit:"MIS782 — Value of Information · Group Assignment T1 2024",
+    problem:"Maersk faced growing operational threats along critical maritime routes including the Red Sea — requiring a proactive, AI-powered threat monitoring capability to predict and mitigate disruptions before they impacted operations and asset safety.",
+    approach:"Evaluated two strategic deployment options: in-house development vs outsourcing. Applied Business Canvas Model, MOV (Measurable Organisational Value) framework, and stakeholder analysis to compare alternatives across cost, control, timeline, and strategic alignment. Developed a phased implementation plan for the recommended option.",
+    metrics:[
+      {num:"2",lbl:"Strategic options evaluated: in-house vs outsourcing"},
+      {num:"In-house",lbl:"Recommended option — best long-term strategic alignment"},
+      {num:"Phased",lbl:"Multi-phase implementation plan developed"},
+      {num:"MOV",lbl:"Measurable Organisational Value framework applied"}
+    ],
+    findings:[
+      "In-house development best aligned with long-term goals of operational safety, technology control, and internal capability building.",
+      "Outsourcing offered faster deployment and lower initial costs but sacrificed strategic control over critical security infrastructure.",
+      "AI-powered real-time threat monitoring would provide a competitive differentiator in an industry facing increasing geopolitical and maritime risk."
+    ],
+    outcome:"Strategic AI business case delivered recommending in-house development of a Real-Time Threat Monitoring System — with full implementation roadmap, stakeholder engagement plan, and MOV metrics positioning Maersk at the forefront of maritime technological innovation."
+  },
+  {
+    id:"ransomware",
+    title:"Ransomware Defence Strategy — Jarvis Consulting Group",
+    badge:"Cybersecurity Strategy",
+    badgeClass:"badge-red",
+    desc:"Developed a multi-layered ransomware defence strategy for Jarvis Consulting Group Perth — identifying crown jewel assets ($10M AUD), threat scenarios, and a phased 5-phase implementation plan.",
+    tools:["Cybersecurity Frameworks","Crown Jewels Analysis","Risk Assessment","Threat Modelling","Incident Response","Implementation Planning"],
+    tags:["consulting"],
+    unit:"MIS761 — Cyber Security Strategies · Individual Assignment T2 2024",
+    problem:"Jarvis Consulting Group faced evolving ransomware threats targeting its most critical assets — confidential client data, financial records, intellectual property, and operational systems — with an estimated combined value of AUD $10 million.",
+    approach:"Conducted a Crown Jewels analysis to identify and value critical assets. Mapped ransomware threat scenarios specific to consultancy environments. Designed a multi-layered defence strategy across 5 implementation phases: Assessment, Training and Awareness, Technology Deployment, Monitoring and Response, and Review and Improvement.",
+    metrics:[
+      {num:"$10M",lbl:"Estimated value of Crown Jewel assets identified"},
+      {num:"5 phases",lbl:"Phased implementation: Assessment through Review"},
+      {num:"4 assets",lbl:"Crown Jewels: client data, financials, IP, operational systems"},
+      {num:"Multi-layer",lbl:"Defence strategy spanning technology, people, and process"}
+    ],
+    findings:[
+      "Targeted ransomware attacks on employee devices represented the primary threat vector for a consultancy handling sensitive multi-sector client data.",
+      "The most critical gap was the absence of phishing awareness training and endpoint protection — basic controls with high impact-to-cost ratios.",
+      "Data backup with encryption and secure offsite storage was identified as the most effective business continuity control against ransomware."
+    ],
+    outcome:"Comprehensive ransomware defence strategy delivered for Jarvis Consulting Group — covering employee training, endpoint protection, backup systems, and a real-time monitoring and response plan to protect $10M in critical assets."
+  },
+  {
+    id:"airbnb",
+    title:"Airbnb Madrid — Review Score Prediction Model",
+    badge:"Predictive Analytics",
+    badgeClass:"badge-purple",
+    desc:"Built multiple regression models to predict Airbnb property review scores for Madrid listings — combining sentiment analysis, text features, and numerical attributes to achieve R-squared of 83.1%.",
+    tools:["RapidMiner","Linear Regression","Sentiment Analysis","Text Analysis","Hold-Out Validation","Correlation Matrix"],
+    tags:["ai","stats"],
+    unit:"MIS772 — Predictive Analytics · Assignment 2, T2 2024",
+    problem:"Airbnb needed to predict customer review scores for Madrid property listings more accurately — to help hosts improve listings and enable Airbnb to proactively identify properties at risk of poor ratings before they received them.",
+    approach:"Explored correlation between host sentiment in property descriptions and guest sentiment in reviews. Built multiple linear regression models using textual, nominal, and numerical features from real Airbnb listing data. Compared models across R-squared, accuracy, and usability. Recommended the Hold Out Regression Model combining nominal and numerical features.",
+    metrics:[
+      {num:"83.1%",lbl:"R-squared — Hold Out Regression Model (best performer)"},
+      {num:"Moderate",lbl:"Correlation between host and guest sentiment"},
+      {num:"3 types",lbl:"Feature sets compared: text, nominal, and numerical"},
+      {num:"Madrid",lbl:"Real Airbnb dataset — actual listing and review data"}
+    ],
+    findings:[
+      "Host and guest sentiments showed only a moderate correlation — host descriptions do not reliably predict how guests feel about a property.",
+      "The Hold Out Regression Model using nominal and numerical features achieved R-squared of 83.1% — significantly outperforming sentiment-only models.",
+      "More complex models incorporating text analysis showed potential but did not significantly outperform simpler regression approaches."
+    ],
+    outcome:"Recommended the Hold Out Regression Model (R-squared 83.1%) as the most accurate and practical predictor of review scores — enabling Airbnb to give hosts actionable advice on which listing attributes most significantly drive positive review outcomes."
+  }
+];
+
+let currentFilter = "all";
+
+function renderGrid(filter){
+  const filtered = filter === "all" ? projects : projects.filter(p=>p.tags.includes(filter));
+  document.getElementById("grid").innerHTML = filtered.map(p=>`
+    <div class="card" onclick="showDetail('${p.id}')">
+      <div class="card-top">
+        <div class="card-title">${p.title}</div>
+        <span class="badge ${p.badgeClass}">${p.badge}</span>
+      </div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="tags">${p.tools.slice(0,4).map(t=>`<span class="tag">${t}</span>`).join("")}${p.tools.length>4?`<span class="tag">+${p.tools.length-4}</span>`:""}</div>
+    </div>
+  `).join("");
+}
+
+function filterProjects(filter, btn){
+  currentFilter = filter;
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  showList();
+  renderGrid(filter);
+}
+
+function showList(){
+  document.getElementById("list-view").style.display = "block";
+  document.getElementById("detail-view").style.display = "none";
+  window.scrollTo(0,0);
+}
+
+function showDetail(id){
+  const p = projects.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById("list-view").style.display = "none";
+  document.getElementById("detail-view").style.display = "block";
+  document.getElementById("detail-content").innerHTML = `
+    <div class="detail-card">
+      <div class="detail-header">
+        <div class="detail-title">${p.title}</div>
+        <span class="badge ${p.badgeClass}" style="font-size:12px;padding:4px 12px">${p.badge}</span>
+      </div>
+      <div class="detail-unit">${p.unit}</div>
+      <div class="section-lbl">Problem</div>
+      <div class="block block-red">${p.problem}</div>
+      <div class="section-lbl">Approach</div>
+      <div class="block block-blue">${p.approach}</div>
+      <div class="section-lbl">Key metrics</div>
+      <div class="metrics">${p.metrics.map(m=>`<div class="metric"><div class="metric-num">${m.num}</div><div class="metric-lbl">${m.lbl}</div></div>`).join("")}</div>
+      <div class="section-lbl">Findings</div>
+      ${p.findings.map(f=>`<div class="block block-blue">${f}</div>`).join("")}
+      <div class="section-lbl">Outcome</div>
+      <div class="block block-green">${p.outcome}</div>
+      <hr class="divider">
+      <div class="section-lbl">Tools and methods</div>
+      <div class="tool-row">${p.tools.map(t=>`<span class="tool">${t}</span>`).join("")}</div>
+    </div>
+  `;
+  window.scrollTo(0,0);
+}
+
+renderGrid("all");
+</script>
+</body>
+</html>
